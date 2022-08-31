@@ -1,0 +1,97 @@
+.table{
+    background-color: aqua;
+    width: 350px;
+    height: 300px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px;
+    margin-bottom: 50px;
+}
+
+.tableM{
+    background-color: aqua;
+    width: 700px;
+    height: 600px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px;
+    margin-bottom: 50px;
+}
+
+.tableD{
+    background-color: aqua;
+    width: 1050px;
+    height: 900px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px;
+    margin-bottom: 50px;
+}
+
+.inputF{
+    width: 10%;
+    background-color: gray;
+}
+
+.inputM{
+    width: 5%;
+    background-color: gray;
+}
+
+.inputD{
+    width: 3.3%;
+    background-color: gray;
+}
+
+
+.difficolta{
+    width: fit-content;
+}
+
+#flag{
+    display: block;
+    margin: auto;
+    width: fit-content;
+    position: sticky;
+    top:10px;
+    height: 40px;
+    font-size: 20px;
+}
+
+#modal{
+    background-color: aqua;
+    width: 400px;
+    height: 100px;
+    margin: auto;
+    padding: 30px;
+    display: none;
+    text-align: center;
+}
+h2{
+    text-align: center;
+}
+#modal input {
+    width: auto;
+}
+
+h3{
+    color: red;
+}
+
+.medio{
+    background-color: aqua;
+    width: 700px;
+    height: 600px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px;
+    margin-bottom: 50px;
+}
