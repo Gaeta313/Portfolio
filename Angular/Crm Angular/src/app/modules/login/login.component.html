@@ -1,0 +1,62 @@
+<div class="content my-5">
+  <form (ngSubmit)="submit()" #f="ngForm">
+    <h1 class="text-center" [style.color]="'#c2185b'">Login</h1>
+    <div class="field">
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input
+          type="text"
+          matInput
+          required
+          ngModel
+          name="username"
+          #username="ngModel"
+        />
+      </mat-form-field>
+      <div
+        [style.color]="'red'"
+        *ngIf="username.invalid && username.touched"
+      >
+        Questo campo è obbligatorio
+      </div>
+      <mat-form-field class="mt-3" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input
+          minlength="6"
+          type="password"
+          matInput
+          required
+          ngModel
+          name="password"
+          #password="ngModel"
+        />
+      </mat-form-field>
+      <div
+        [style.color]="'red'"
+        *ngIf="password.invalid && password.touched && !password.dirty"
+      >
+        Questo campo è obbligatorio
+      </div>
+      <div
+        [style.color]="'red'"
+        *ngIf="password.invalid && password.touched && password.dirty"
+      >
+        La password deve essere lunga almeno 6 caratteri
+      </div>
+
+      <div class="mt-4">
+        <button
+          [disabled]="f.invalid"
+          mat-raised-button
+          color="primary"
+          type="submit"
+        >
+          <div id="button">
+            Login
+            <mat-spinner *ngIf="caricamento" color="accent" [diameter]="20"></mat-spinner>
+          </div>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,37 @@
+<h1 class="text-center my-5 ">Benvenuto {{ user?.username }} </h1>
+
+<div class="contenitore">
+  <mat-card id="uno" routerLink="/clienti" (click)="default()" >
+    <mat-card-header>
+      <mat-card-title>Clienti</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <img
+        src="../../../assets/img/customer-care-vs-customer-satisfaction.jpg"
+        width="100%"
+        alt=""
+      />
+    </mat-card-content>
+  </mat-card>
+  <mat-card id="due" routerLink="/utenti"  >
+    <mat-card-header>
+      <mat-card-title>Utenti</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <img src="../../../assets/img/users.png" width="100%" alt="" />
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card id="tre"  routerLink="/fatture" (click)="defaultFat()" >
+    <mat-card-header>
+      <mat-card-title>Fatture</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <img
+        src="../../../assets/img/Why-Solution-Invoicing.jpg"
+        width="100%"
+        alt=""
+      />
+    </mat-card-content>
+  </mat-card>
+</div>

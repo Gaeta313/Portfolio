@@ -1,0 +1,183 @@
+<div class="container strumenti">
+  <h2 *ngIf="mostraNascondi">Strumenti</h2>
+  <mat-toolbar *ngIf="mostraNascondi">
+    <mat-toolbar-row id="rigaUno">
+      <div>
+        <button mat-mini-fab color="basic" [matMenuTriggerFor]="menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item *ngIf="!tabella" (click)="getTabella()">
+            <mat-icon [style.color]="'#c2185b'"> table_chart</mat-icon>
+            <span>Visalizzazione Tabella</span>
+          </button>
+          <button mat-menu-item *ngIf="tabella" (click)="getTabella()">
+            <mat-icon [style.color]="'#c2185b'">view_module</mat-icon>
+            <span>Visalizzazione Griglia</span>
+          </button>
+          <button mat-menu-item (click)="sortby('id')">
+            <mat-icon [style.color]="'#c2185b'">sort</mat-icon>
+            <span>Ordina per ID</span>
+          </button>
+          <button mat-menu-item (click)="sortby('importo')">
+            <mat-icon [style.color]="'#c2185b'">sort</mat-icon>
+            <span>Ordina per importo</span>
+          </button>
+        </mat-menu>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="mostraENascondi()"
+          [routerLink]="'0' + '/' + cliente?.id"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon [style.color]="'#424242'">post_add</mat-icon>
+          Nuova Fattura
+        </button>
+        <button (click)="openDialog(cliente)" mat-raised-button color="primary">
+          <mat-icon [style.color]="'#424242'">info</mat-icon>
+          Info Cliente
+        </button>
+        <button (click)="annulla()" mat-raised-button color="primary">
+          <mat-icon [style.color]="'#424242'">undo</mat-icon>
+          Torna ai Clienti
+        </button>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+
+<!-- ROUTER OUTLES -->
+<div *ngIf="!mostraNascondi">
+  <router-outlet></router-outlet>
+</div>
+
+<h1 class="text-center my-5" *ngIf="mostraNascondi">
+  Fatture Cliente : {{ cliente?.ragioneSociale }}
+</h1>
+
+<!-- Paginator -->
+<div class="container" [ngClass]="{ hidden: !mostraNascondi }">
+  <mat-paginator
+    class="m-4"
+    [length]="fattureObj?.totalElements"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20, 50, 100]"
+    aria-label="Select page"
+    showFirstLastButtons="true"
+    (page)="pageEvent($event)"
+  >
+  </mat-paginator>
+</div>
+<!-- PAGINA PRINCIPALE -->
+<mat-spinner *ngIf="caricamento && mostraNascondi"></mat-spinner>
+<div *ngIf="fatture">
+  <h2 class="text-center" *ngIf="mostraNascondi && fatture.length == 0">Non ci sono fatture</h2>
+</div>
+
+<div class="contenitore" *ngIf="!caricamento && mostraNascondi && !tabella">
+  <mat-card *ngFor="let fattura of fatture">
+    <mat-card-header>
+      <mat-card-title>Fattura N. {{ fattura.numero }}</mat-card-title>
+      <button mat-mini-fab color="basic" [matMenuTriggerFor]="menuC">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menuC="matMenu">
+        <button
+          mat-menu-item
+          (click)="mostraENascondi()"
+          [routerLink]="fattura.id + '/' + cliente.id"
+        >
+          <mat-icon [style.color]="'#c2185b'">note_alt</mat-icon>
+          <span>Modifica Fattura</span>
+        </button>
+        <button mat-menu-item (click)="openAlert(fattura.id)">
+          <mat-icon [style.color]="'#c2185b'">delete</mat-icon>
+          <span>Elimina Fattura</span>
+        </button>
+      </mat-menu>
+    </mat-card-header>
+    <mat-card-content>
+      <p><mat-icon>calendar_month </mat-icon>Anno : {{ fattura.anno }}</p>
+      <p><mat-icon>calendar_month</mat-icon>Data : {{ fattura.data }}</p>
+      <p><mat-icon>attach_money</mat-icon>Importo : {{ fattura.importo }} €</p>
+      <p>
+        <mat-icon> pending </mat-icon>Stato :
+        <span *ngIf="fattura.stato.nome == 'PAGATA'" [style.color]="'green'">
+          {{ fattura.stato.nome }}</span
+        >
+        <span
+          *ngIf="fattura.stato.nome == 'NON PAGATA'"
+          [style.color]="'#c2185b'"
+        >
+          {{ fattura.stato.nome }}</span
+        >
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>
+<!-- TABELLA -->
+<div class="container">
+  <div id="tabella" *ngIf="!caricamento && mostraNascondi && tabella">
+    <table mat-table [dataSource]="fatture" class="mat-elevation-z8">
+      <ng-container matColumnDef="numeroFattura">
+        <th mat-header-cell *matHeaderCellDef>Fattura N.</th>
+        <td mat-cell *matCellDef="let fattura">{{ fattura.numero }}</td>
+      </ng-container>
+      <ng-container matColumnDef="anno">
+        <th mat-header-cell *matHeaderCellDef>Data</th>
+        <td mat-cell *matCellDef="let fattura" id="cella">
+          <mat-icon>calendar_month</mat-icon>
+          {{ fattura.data }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="importo">
+        <th mat-header-cell *matHeaderCellDef>Importo</th>
+        <td mat-cell *matCellDef="let fattura" id="cella">
+          <mat-icon>attach_money</mat-icon>
+          {{ fattura.importo }} €
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="stato">
+        <th mat-header-cell *matHeaderCellDef>Stato</th>
+        <td mat-cell *matCellDef="let fattura" id="cella">
+          <span *ngIf="fattura.stato.nome == 'PAGATA'" [style.color]="'green'">
+            {{ fattura.stato.nome }}</span
+          >
+          <span
+            *ngIf="fattura.stato.nome == 'NON PAGATA'"
+            [style.color]="'#c2185b'"
+          >
+            {{ fattura.stato.nome }}</span
+          >
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+        <td mat-cell *matCellDef="let fattura" class="text-center">
+          <button mat-mini-fab color="basic" [matMenuTriggerFor]="menuC">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <mat-menu #menuC="matMenu">
+            <button
+              mat-menu-item
+              (click)="mostraENascondi()"
+              [routerLink]="fattura.id + '/' + cliente.id"
+            >
+              <mat-icon [style.color]="'#c2185b'">note_add</mat-icon>
+              <span>Modifica Fattura</span>
+            </button>
+            <button mat-menu-item (click)="openAlert(fattura.id)">
+              <mat-icon [style.color]="'#c2185b'">delete</mat-icon>
+              <span>Elimina Fattura</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>

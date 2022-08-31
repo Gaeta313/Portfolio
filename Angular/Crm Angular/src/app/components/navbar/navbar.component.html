@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+ <div class="first">
+    <h2>Angular CRM</h2>
+    <mat-list role="list">
+      <mat-list-item *ngIf="!user" role="listitem"><a  routerLink="/presentazione" routerLinkActive="active">Presentazione</a></mat-list-item>
+      <mat-list-item *ngIf="user">  <a  routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a> </mat-list-item>
+      <mat-list-item *ngIf="!user" ><a  routerLink="/login" routerLinkActive="active">Login</a></mat-list-item>
+      <mat-list-item ><a  routerLink="/registrati" routerLinkActive="active">Registrazione</a></mat-list-item>
+      <mat-list-item *ngIf="user" role="listitem"><a  routerLink="/utenti" routerLinkActive="active">Utenti</a></mat-list-item>
+      <mat-list-item *ngIf="user" role="listitem"><a  routerLink="/clienti" (click)="default()" routerLinkActive="active">Clienti</a></mat-list-item>
+      <mat-list-item *ngIf="user" role="listitem"><a  routerLink="/fatture" (click)="defaultFat()" routerLinkActive="active">Fatture</a></mat-list-item>
+    </mat-list>
+ </div>
+ <div *ngIf="user" class="second">
+   <h3>{{user?.username}}</h3>
+  <button mat-raised-button (click)="logout()">Logout</button>
+ </div>
+
+</mat-toolbar>

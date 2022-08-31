@@ -1,0 +1,43 @@
+#titolo{
+  font-size: 2rem;
+}
+
+#sfondoTitolo{
+  background: rgb(194,24,91);
+  background: linear-gradient(45deg, rgba(194,24,91,1) 0%, rgba(66,66,66,1) 65%);
+  padding: 1em;
+  box-shadow: 0px 0px 20px 3px rgb(194,24,91) ;
+}
+
+.scheda{
+  background: rgb(194,24,91);
+  background: linear-gradient(45deg, rgba(194,24,91,1) 0%, rgba(66,66,66,1) 65%);
+  padding: 1em;
+  box-shadow: 0px 0px 20px 3px rgb(194,24,91) ;
+  margin-bottom: 5rem !important;
+}
+
+.schedaContent{
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+
+a{
+  text-decoration: none;
+  color: rgb(194,24,91) ;
+}
+
+.ricerca{
+  flex-direction: column !important;
+}
+
+
+img{
+  width: 100%;
+  flex-basis: 45%;
+}
+
+header{
+  margin-bottom: 8rem !important;
+}

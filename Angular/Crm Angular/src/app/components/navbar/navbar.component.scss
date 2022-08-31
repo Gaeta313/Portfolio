@@ -1,0 +1,40 @@
+mat-list-item{
+  display: inline;
+  padding: 0px
+}
+
+mat-list{
+  display: flex;
+  padding-top: 0px;
+}
+
+a{
+  color: white;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+a:hover{
+  opacity: 1;
+}
+
+.active{
+  opacity: 1;
+}
+
+.first, .second{
+  display: flex;
+  align-items: center;
+}
+
+
+
+mat-toolbar{
+  display: flex;
+  justify-content: space-between;
+}
+
+h3{
+  margin-right: 10px;
+}
+

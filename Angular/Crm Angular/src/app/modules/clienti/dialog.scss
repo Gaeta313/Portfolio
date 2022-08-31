@@ -1,0 +1,23 @@
+
+table{
+  width: 100%;
+  border: 2px solid black
+}
+th{
+  font-size: 1em;
+}
+
+th,td{
+  padding : 10px;
+  border: 2px solid black
+}
+
+tr:nth-child(even){
+  background-color: #c2185cb3;
+}
+tr:nth-child(odd){
+  background-color:#c2185c5a ;
+}
+
+
+

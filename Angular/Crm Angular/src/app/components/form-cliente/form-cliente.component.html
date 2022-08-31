@@ -1,0 +1,204 @@
+<div>
+  <div class="content my-5">
+    <mat-spinner *ngIf="!semaforo"></mat-spinner>
+    <form *ngIf="semaforo" [formGroup]="form" (ngSubmit)="submit()">
+      <h1 class="text-center" [style.color]="'#c2185b'">{{ titolo }}</h1>
+      <div>
+        <h2>Dati Cliente</h2>
+        <mat-form-field>
+          <mat-label>Ragione Sociale</mat-label>
+          <input type="text" formControlName="ragioneSociale" matInput />
+        </mat-form-field>
+        <div
+          [style.color]="'red'"
+          *ngIf="
+            this.form.get('ragioneSociale')?.invalid &&
+            this.form.get('ragioneSociale')?.touched
+          "
+        >
+          Questo campo è obbligatorio
+        </div>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Partita Iva</mat-label>
+          <input type="text" formControlName="partitaIva" matInput />
+        </mat-form-field>
+      </div>
+      <div
+        [style.color]="'red'"
+        *ngIf="
+          this.form.get('partitaIva')?.invalid &&
+          this.form.get('partitaIva')?.touched
+        "
+      >
+        Questo campo è obbligatorio
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input type="text" formControlName="email" matInput />
+        </mat-form-field>
+      </div>
+      <div
+        [style.color]="'red'"
+        *ngIf="
+          this.form.get('email')?.invalid &&
+          this.form.get('email')?.touched &&
+          !this.form.get('email')?.dirty
+        "
+      >
+        Questo campo è obbligatorio
+      </div>
+      <div
+        [style.color]="'red'"
+        *ngIf="
+          this.form.get('email')?.invalid &&
+          this.form.get('email')?.touched &&
+          this.form.get('email')?.dirty
+        "
+      >
+        Il formato email non è valido
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Pec</mat-label>
+          <input type="text" formControlName="pec" matInput />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Telefono</mat-label>
+          <input type="text" formControlName="telefono" matInput />
+        </mat-form-field>
+        <div>
+          <mat-form-field>
+            <mat-label>Tipo Cliente</mat-label>
+            <mat-select name="valore" formControlName="tipoCliente">
+              <mat-option *ngFor="let tipo of tipiCliente" [value]="tipo">{{
+                tipo
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div
+            [style.color]="'red'"
+            *ngIf="
+              this.form.get('tipoCliente')?.invalid &&
+              this.form.get('tipoCliente')?.touched
+            "
+          >
+            Questo campo è obbligatorio
+          </div>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Nome Contatto</mat-label>
+            <input type="text" formControlName="nomeContatto" matInput />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Cognome Contatto</mat-label>
+            <input type="text" formControlName="cognomeContatto" matInput />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Telefono Contatto</mat-label>
+            <input type="text" formControlName="telefonoContatto" matInput />
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Email Contatto</mat-label>
+            <input type="text" formControlName="emailContatto" matInput />
+          </mat-form-field>
+          <div
+            [style.color]="'red'"
+            *ngIf="
+              this.form.get('emailContatto')?.invalid &&
+              this.form.get('emailContatto')?.touched &&
+              !this.form.get('emailContatto')?.dirty
+            "
+          >
+            Questo campo è obbligatorio
+          </div>
+          <div
+          [style.color]="'red'"
+          *ngIf="
+            this.form.get('emailContatto')?.invalid &&
+            this.form.get('emailContatto')?.touched &&
+            this.form.get('emailContatto')?.dirty
+          "
+        >
+          Il formato email non è valido
+        </div>
+        </div>
+        <h2>Dati Sede Operativa</h2>
+        <div formGroupName="indirizzoSedeOperativa">
+          <div>
+            <mat-form-field>
+              <mat-label>Via</mat-label>
+              <input type="text" formControlName="via" matInput />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Civico</mat-label>
+              <input type="text" formControlName="civico" matInput />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Cap</mat-label>
+              <input type="text" formControlName="cap" matInput />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Località</mat-label>
+              <input type="text" formControlName="localita" matInput />
+            </mat-form-field>
+          </div>
+          <div formGroupName="comune">
+            <div>
+              <mat-form-field>
+                <mat-label>Comune</mat-label>
+                <mat-select
+                  (ngModelChange)="onSelect($event)"
+                  name="valore"
+                  formControlName="nome"
+                >
+                  <mat-option
+                    *ngFor="let comune of comuni"
+                    [value]="comune.nome"
+                    >{{ comune.nome }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div formGroupName="provincia">
+              <mat-form-field>
+                <mat-label>Provincia</mat-label>
+                <input type="text" formControlName="nome" matInput />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="button">
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="this.form.invalid"
+        >
+          {{ nomePulsante }}
+        </button>
+        <button (click)="annulla()" mat-raised-button color="warn">
+          Annulla
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

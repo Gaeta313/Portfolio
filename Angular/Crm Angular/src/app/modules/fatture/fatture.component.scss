@@ -1,0 +1,110 @@
+.contenitore{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 10px;
+  row-gap: 20px;
+}
+
+mat-card{
+  width: 30%;
+}
+
+.azioni{
+  display: flex;
+  align-items: center;
+}
+
+
+
+.hidden{
+  visibility: hidden;
+}
+
+#actions{
+  display: flex;
+  justify-content: center;
+}
+mat-spinner{
+  margin: auto;
+  margin-top :30px;
+}
+
+#select{
+  margin-right: 10px;
+}
+#rigaUno{
+  background-color: #424242;
+
+  align-items: center;
+  justify-content: center;
+  justify-content: space-between;
+}
+mat-toolbar-row{
+  background-color: #424242;
+}
+
+table{
+  width: 100%;
+}
+
+mat-toolbar{
+  box-shadow: 0px 0px 20px 2px #c2185b;
+}
+mat-toolbar button{
+  margin-left: 5px;
+}
+
+.strumenti{
+  position:sticky;
+  top: 20px;
+  z-index: 9;
+}
+
+.red{
+  color: #c2185b;
+}
+
+p{
+  display: flex;
+}
+mat-icon{
+
+  color: #c2185b;
+}
+
+table button{
+  margin-left: 10px;
+}
+
+#rigaDue{
+  display: flex;
+  justify-content: space-between;
+}
+
+#actionBar{
+  width: 100%;
+}
+
+#actionBar mat-form-field{
+  width: 45%;
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+#dataP{
+  position: relative;
+  top: 10px;
+
+}
+
+
+mat-card-header{
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+mat-card-title{
+  margin-bottom: 0px !important;
+}

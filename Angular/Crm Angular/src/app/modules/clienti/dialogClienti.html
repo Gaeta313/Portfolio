@@ -1,0 +1,144 @@
+<h1 mat-dialog-title>{{data.cliente.ragioneSociale}}</h1>
+<div mat-dialog-content id="contenitore">
+<div>
+  <h2>Dati Generali</h2>
+  <table class="mat-table">
+    <tbody>
+      <tr>
+        <th class="mat-header-cell">Id :</th>
+        <td class="mat-cell" >
+          {{data.cliente.id}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Nome Contatto :</th>
+        <td class="mat-cell" >
+          {{data.cliente.nomeContatto}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Cognome Contatto :</th>
+        <td class="mat-cell" >
+          {{data.cliente.cognomeContatto}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Email :</th>
+        <td class="mat-cell" >
+          {{data.cliente.email}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Email Contatto :</th>
+        <td class="mat-cell" >
+          {{data.cliente.emailContatto}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Telefono :</th>
+        <td class="mat-cell" >
+          {{data.cliente.telefono}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Telefono Contatto :</th>
+        <td class="mat-cell" >
+          {{data.cliente.telefonoContatto}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Tipo Cliente :</th>
+        <td class="mat-cell" >
+          {{data.cliente.tipoCliente}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Data Inserimento :</th>
+        <td class="mat-cell" >
+          {{data.cliente.dataInserimento}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+   <h2>Dati di Fatturazione</h2>
+   <table>
+     <tbody>
+      <tr>
+        <th class="mat-header-cell">Partita Iva :</th>
+        <td class="mat-cell" >
+          {{data.cliente.partitaIva}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Pec :</th>
+        <td class="mat-cell" >
+          {{data.cliente.pec}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Ragione Sociale :</th>
+        <td class="mat-cell" >
+          {{data.cliente.ragioneSociale}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Fatturato Annuale :</th>
+        <td class="mat-cell" *ngIf="data.cliente.fatturatoAnnuale" >
+          {{data.cliente.fatturatoAnnuale}} €
+        </td>
+        <td class="mat-cell" *ngIf="data.cliente.fatturatoAnnuale == null" >
+          0 €
+        </td>
+      </tr>
+     </tbody>
+   </table>
+
+   <h2>Indirizzo Sede Operativa</h2>
+   <table>
+     <tbody>
+      <tr>
+        <th class="mat-header-cell">Comune:</th>
+        <td class="mat-cell" >
+          {{data.cliente.indirizzoSedeOperativa?.comune.nome}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Provincia</th>
+        <td class="mat-cell" >
+          {{data.cliente.indirizzoSedeOperativa?.comune?.provincia.nome}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Località</th>
+        <td class="mat-cell" >
+          {{data.cliente.indirizzoSedeOperativa?.localita}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Via</th>
+        <td class="mat-cell" >
+          {{data.cliente.indirizzoSedeOperativa?.via}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Cap</th>
+        <td class="mat-cell" >
+          {{data.cliente.indirizzoSedeOperativa?.cap}}
+        </td>
+      </tr>
+      <tr>
+        <th class="mat-header-cell">Civico</th>
+        <td class="mat-cell" >
+          {{data.cliente.indirizzoSedeOperativa?.civico}}
+        </td>
+      </tr>
+     </tbody>
+   </table>
+</div>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close color="primary">Chiudi</button>
+</div>
+
+

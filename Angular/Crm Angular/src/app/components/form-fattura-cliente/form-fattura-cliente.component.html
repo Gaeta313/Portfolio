@@ -1,0 +1,87 @@
+<div class="content my-5">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <h1>{{ titolo }}</h1>
+    <mat-form-field>
+      <mat-label>Numero</mat-label>
+      <input type="number" matInput formControlName="numero" />
+    </mat-form-field>
+    <div
+      [style.color]="'red'"
+      *ngIf="
+        this.form.get('numero')?.invalid &&
+        this.form.get('numero')?.touched &&
+        !this.form.get('numero')?.dirty
+      "
+    >
+      Questo campo è obbligatorio
+    </div>
+    <div
+      [style.color]="'red'"
+      *ngIf="
+        this.form.get('numero')?.invalid &&
+        this.form.get('numero')?.touched &&
+        this.form.get('numero')?.dirty
+      "
+    >
+      Solo numeri maggiori di 0
+    </div>
+    <mat-form-field>
+      <mat-label>Importo</mat-label>
+      <input type="number" matInput formControlName="importo" />
+    </mat-form-field>
+    <div
+      [style.color]="'red'"
+      *ngIf="
+        this.form.get('importo')?.invalid &&
+        this.form.get('importo')?.touched &&
+        !this.form.get('importo')?.dirty
+      "
+    >
+      Questo campo è obbligatorio
+    </div>
+    <div
+      [style.color]="'red'"
+      *ngIf="
+        this.form.get('importo')?.invalid &&
+        this.form.get('importo')?.touched &&
+        this.form.get('importo')?.dirty
+      "
+    >
+      Solo numeri maggiori di 0
+    </div>
+    <mat-form-field>
+      <mat-label>anno</mat-label>
+      <input type="text" matInput formControlName="anno" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Data Fattura</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="data" />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <div formGroupName="stato">
+      <mat-form-field>
+        <mat-label>Stato Fattura</mat-label>
+        <mat-select formControlName="nome">
+          <mat-option *ngFor="let stato of stati" [value]="stato.nome">
+            {{ stato.nome }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div id="button">
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="this.form.invalid"
+      >
+        {{ nomePulsante }}
+      </button>
+      <button (click)="annulla()" mat-raised-button color="warn">
+        Annulla
+      </button>
+    </div>
+  </form>
+</div>

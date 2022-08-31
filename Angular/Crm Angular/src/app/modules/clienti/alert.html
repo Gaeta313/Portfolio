@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Confermare eliminazione Cliente ? </h1>
+<div mat-dialog-content>
+<p>L'eliminazione del cliente comporterà anche l'eliminazione di tutte le fatture ad
+  esso associate.
+</p>
+<p>Confermi di voler procedere ?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close color="primary" [mat-dialog-close]="true">Conferma</button>
+  <button mat-raised-button mat-dialog-close color="basic" [mat-dialog-close]="false">Annulla</button>
+</div>

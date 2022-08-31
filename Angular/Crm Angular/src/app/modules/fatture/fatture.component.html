@@ -1,0 +1,251 @@
+<!-- Router Outlet -->
+<div *ngIf="!mostraNascondi">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="container strumenti">
+  <h2 *ngIf="mostraNascondi">Strumenti</h2>
+  <mat-toolbar *ngIf="mostraNascondi">
+    <mat-toolbar-row id="rigaUno">
+      <div>
+        <button mat-mini-fab color="basic" [matMenuTriggerFor]="menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item *ngIf="!tabella" (click)="getTabella()">
+            <mat-icon [style.color]="'#c2185b'"> table_chart</mat-icon>
+            <span>Visalizzazione Tabella</span>
+          </button>
+          <button mat-menu-item *ngIf="tabella" (click)="getTabella()">
+            <mat-icon [style.color]="'#c2185b'">view_module</mat-icon>
+            <span>Visalizzazione Griglia</span>
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="stato">
+            <mat-icon [style.color]="'#c2185b'">visibility</mat-icon>Visualizza tutte le fatture :
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="ricerca">
+            <mat-icon [style.color]="'#c2185b'">search</mat-icon>Cerca per :
+          </button>
+          <button mat-menu-item (click)="barraRicercaFlag = ''" *ngIf="barraRicercaFlag != ''">
+            <mat-icon [style.color]="'#c2185b'">search_off</mat-icon>Nascondi barra ricerca
+          </button>
+          <button mat-menu-item (click)="sortby('id')">
+            <mat-icon [style.color]="'#c2185b'">sort</mat-icon>
+            <span>Ordina per ID</span>
+          </button>
+          <button mat-menu-item (click)="sortby('importo')">
+            <mat-icon [style.color]="'#c2185b'">sort</mat-icon>
+            <span>Ordina per importo</span>
+          </button>
+        </mat-menu>
+        <mat-menu #stato="matMenu">
+          <button mat-menu-item (click)="visualizzaStato(0)">
+            <mat-icon [style.color]="'#c2185b'"> 360</mat-icon>
+            <span>Tutti gli stati</span>
+          </button>
+          <button mat-menu-item (click)="visualizzaStato(1)">
+            <mat-icon [style.color]="'#c2185b'"> attach_money</mat-icon>
+            <span>Pagate</span>
+          </button>
+          <button mat-menu-item (click)="visualizzaStato(2)">
+            <mat-icon [style.color]="'#c2185b'"> money_off</mat-icon>
+            <span>Non Pagate</span>
+          </button>
+        </mat-menu>
+        <mat-menu #ricerca="matMenu">
+          <button mat-menu-item (click)="barraRicercaFlag = 'importo'" >
+            <mat-icon [style.color]="'#c2185b'"> attach_money</mat-icon>
+            <span>Importo</span>
+          </button>
+          <button mat-menu-item (click)="barraRicercaFlag = 'data'" >
+            <mat-icon [style.color]="'#c2185b'"> date_range</mat-icon>
+            <span>Data </span>
+          </button>
+        </mat-menu>
+      </div>
+      <div id="actionBar" *ngIf="barraRicercaFlag == 'importo'">
+        <mat-form-field >
+          <input
+            matInput
+            type="number"
+            placeholder="Importo minimo"
+            [(ngModel)]="valoreRicerca1"
+            [min]="0"
+          />
+        </mat-form-field>
+        <mat-form-field >
+          <input
+            matInput
+            type="number"
+            placeholder="Importo massimo"
+            [(ngModel)]="valoreRicerca2"
+            [min]="0"
+          />
+        </mat-form-field>
+      </div>
+      <div id="actionBar" *ngIf="barraRicercaFlag == 'data'">
+        <mat-form-field appearance="fill" id="dataP">
+          <mat-label>Seleziona un range di date</mat-label>
+          <mat-date-range-input class="mt-1"  [rangePicker]="picker">
+            <input matStartDate [(ngModel)]="data1"  placeholder="Start date">
+            <input matEndDate [(ngModel)]="data2" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+      </div>
+      <div *ngIf="barraRicercaFlag != ''">
+        <button mat-raised-button color="primary" (click)="cerca()">
+          Cerca
+        </button>
+        <button mat-raised-button color="primary" (click)="reset()">
+          Reset
+        </button>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+
+<h1 class="text-center my-5" *ngIf="mostraNascondi">Lista Fatture</h1>
+
+<!-- Paginator -->
+<div class="container" [ngClass]="{ hidden: !mostraNascondi }">
+  <mat-paginator
+    [disabled]="!fattureObj || !mostraNascondi"
+    class="m-4"
+    [length]="fattureObj?.totalElements"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20, 50, 100]"
+    aria-label="Select page"
+    showFirstLastButtons="true"
+    (page)="pageEvent($event)"
+  >
+  </mat-paginator>
+</div>
+
+<mat-spinner *ngIf="caricamento && mostraNascondi"></mat-spinner>
+<div *ngIf="fatture">
+  <h2 class="text-center" *ngIf="fatture.length== 0">La ricerca non ha prodotto risultati</h2>
+</div>
+
+
+<div class="contenitore" *ngIf="!caricamento && mostraNascondi && !tabella">
+  <mat-card *ngFor="let fattura of fatture">
+    <mat-card-header>
+      <mat-card-title>Fattura N. {{ fattura.numero }}</mat-card-title>
+      <button mat-mini-fab color="basic" [matMenuTriggerFor]="menuC">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menuC="matMenu">
+        <button
+          mat-menu-item
+          (click)="abilita()"
+          [routerLink]="'../clienti/' + fattura.cliente?.id + '/fattureCliente'"
+        >
+          <mat-icon [style.color]="'#c2185b'">folder_open</mat-icon>
+          <span> Tutte le fatture dell'intestatario</span>
+        </button>
+        <button
+          mat-menu-item
+          (click)="mostraENascondi()"
+          [routerLink]="fattura.id + '/' + fattura.cliente?.id"
+        >
+          <mat-icon [style.color]="'#c2185b'">note_alt</mat-icon>
+          <span>Modifica Fattura</span>
+        </button>
+
+        <button mat-menu-item (click)="openAlert(fattura.id)">
+          <mat-icon [style.color]="'#c2185b'">delete</mat-icon>
+          <span>Elimina Fattura</span>
+        </button>
+      </mat-menu>
+    </mat-card-header>
+    <mat-card-content>
+      <p><mat-icon>calendar_month </mat-icon> Anno : {{ fattura.anno }}</p>
+      <p><mat-icon>calendar_month </mat-icon> Data : {{ fattura.data }}</p>
+      <p><mat-icon>attach_money </mat-icon> Importo : {{ fattura.importo }} €</p>
+      <p>
+        <mat-icon> pending </mat-icon> Stato : <span *ngIf="fattura.stato.nome == 'PAGATA'" [style.color]="'green'"> {{ fattura.stato.nome }}</span>
+        <span  *ngIf="fattura.stato.nome == 'NON PAGATA'" [style.color]="'#c2185b'"> {{ fattura.stato.nome }}</span>
+
+      </p>
+
+      <p> <mat-icon> person</mat-icon>Intestatario: {{ fattura.cliente?.ragioneSociale }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- TABELLA -->
+<div class="container">
+  <div id="tabella" *ngIf="!caricamento && mostraNascondi && tabella">
+    <table mat-table [dataSource]="fatture" class="mat-elevation-z8">
+      <ng-container matColumnDef="numeroFattura">
+        <th mat-header-cell *matHeaderCellDef>Fattura N.</th>
+        <td mat-cell *matCellDef="let fattura">{{ fattura.numero }}</td>
+      </ng-container>
+      <ng-container matColumnDef="anno">
+        <th mat-header-cell *matHeaderCellDef>Data</th>
+        <td mat-cell *matCellDef="let fattura" id="cella">
+          <mat-icon>calendar_month</mat-icon>
+          {{ fattura.data }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="intestatario">
+        <th mat-header-cell *matHeaderCellDef>Intestatario</th>
+        <td mat-cell *matCellDef="let fattura" id="cella">
+          <mat-icon> person</mat-icon>
+          {{ fattura.cliente.ragioneSociale }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="importo">
+        <th mat-header-cell *matHeaderCellDef>Importo</th>
+        <td mat-cell *matCellDef="let fattura" id="cella">
+          <mat-icon>attach_money</mat-icon>
+          {{ fattura.importo }} €
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="stato">
+        <th mat-header-cell *matHeaderCellDef>Stato</th>
+        <td mat-cell *matCellDef="let fattura" id="cella">
+         <span *ngIf="fattura.stato.nome == 'PAGATA'" [style.color]="'green'"> {{ fattura.stato.nome }}</span>
+        <span *ngIf="fattura.stato.nome == 'NON PAGATA'" [style.color]="'#c2185b'"> {{ fattura.stato.nome }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+        <td mat-cell *matCellDef="let fattura" class="text-center">
+          <button mat-mini-fab color="basic" [matMenuTriggerFor]="menuC">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <mat-menu #menuC="matMenu">
+            <button
+              mat-menu-item
+              (click)="abilita()"
+              [routerLink]="
+                '../clienti/' + fattura.cliente.id + '/fattureCliente'
+              "
+            >
+              <mat-icon [style.color]="'#c2185b'">note_add</mat-icon>
+              <span>Tutte le fatture dell'intestatario</span>
+            </button>
+            <button
+              mat-menu-item
+              (click)="mostraENascondi()"
+              [routerLink]="fattura.id + '/' + fattura.cliente.id"
+            >
+              <mat-icon [style.color]="'#c2185b'">note_add</mat-icon>
+              <span>Modifica Fattura</span>
+            </button>
+            <button mat-menu-item (click)="openAlert(fattura.id)">
+              <mat-icon [style.color]="'#c2185b'">delete</mat-icon>
+              <span>Elimina Fattura</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>

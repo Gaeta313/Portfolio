@@ -1,0 +1,246 @@
+<!-- Router Outlet -->
+<div *ngIf="!mostraNascondi">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="container strumenti">
+  <h2  *ngIf="mostraNascondi">Strumenti</h2>
+  <mat-toolbar *ngIf="mostraNascondi">
+    <mat-toolbar-row id="rigaUno">
+      <div>
+        <button mat-mini-fab color="basic" [matMenuTriggerFor]="menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item *ngIf="!tabella" (click)="getTabella()">
+            <mat-icon [style.color]="'#c2185b'"> table_chart</mat-icon>
+            <span>Visalizzazione Tabella</span>
+          </button>
+          <button mat-menu-item *ngIf="tabella" (click)="getTabella()">
+            <mat-icon [style.color]="'#c2185b'">view_module</mat-icon>
+            <span>Visalizzazione Griglia</span>
+          </button>
+          <button
+            mat-menu-item
+            *ngIf="!barraRicercaFlag"
+            (click)="barraRicercaFlag = !barraRicercaFlag"
+          >
+            <mat-icon [style.color]="'#c2185b'">search</mat-icon>
+            <span>Mostra barra di ricerca</span>
+          </button>
+          <button
+            mat-menu-item
+            *ngIf="barraRicercaFlag"
+            (click)="barraRicercaFlag = !barraRicercaFlag"
+          >
+            <mat-icon [style.color]="'#c2185b'">search_off</mat-icon>
+            <span>Nascondi barra di ricerca</span>
+          </button>
+
+          <button mat-menu-item (click)="sortby('id')">
+            <mat-icon [style.color]="'#c2185b'">sort</mat-icon>
+            <span>Ordina per ID</span>
+          </button>
+          <button mat-menu-item (click)="sortby('ragioneSociale')">
+            <mat-icon [style.color]="'#c2185b'">sort</mat-icon>
+            <span>Ordina per Ragione Sociale</span>
+          </button>
+        </mat-menu>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="mostraENascondi()"
+          [routerLink]="'0'"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+        <mat-icon [style.color]="'#424242'">person_add</mat-icon>
+          Nuovo Cliente
+        </button>
+      </div>
+    </mat-toolbar-row>
+    <mat-toolbar-row *ngIf="barraRicercaFlag" id="rigaDue">
+      <div id="actionBar">
+        <mat-form-field id="select">
+          <mat-label>Cerca per:</mat-label>
+          <mat-select
+            [(ngModel)]="tipoRicerca"
+            name="valore"
+            [placeholder]="tipoRicerca"
+          >
+            <mat-option [value]="'email'">Email</mat-option>
+            <mat-option [value]="'ragione'">Ragione Sociale</mat-option>
+            <mat-option [value]="'partita'">Partita Iva</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="tipoRicerca == 'email'">
+          <input
+            matInput
+            type="text"
+            placeholder="inserisci Email"
+            [(ngModel)]="valoreRicerca"
+          />
+        </mat-form-field>
+        <mat-form-field *ngIf="tipoRicerca == 'ragione'">
+          <input
+            matInput
+            type="text"
+            placeholder="inserisci Ragione Sociale"
+            *ngIf="tipoRicerca == 'ragione'"
+            [(ngModel)]="valoreRicerca"
+          />
+        </mat-form-field>
+        <mat-form-field *ngIf="tipoRicerca == 'partita'">
+          <input
+            matInput
+            type="text"
+            placeholder="inserisci Partita Iva"
+            *ngIf="tipoRicerca == 'partita'"
+            [(ngModel)]="valoreRicerca"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="cerca()">
+          Cerca
+        </button>
+        <button mat-raised-button color="primary" (click)="reset()">
+          Resetta Ricerca
+        </button>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+
+<h1 class="text-center my-5" *ngIf="mostraNascondi">Clienti</h1>
+
+
+
+<!-- Toolbar Actions -->
+
+<!-- Paginator -->
+<div class="container"  [ngClass]="{ hidden: !mostraNascondi }">
+  <mat-paginator
+    [disabled]="!clientiObj || !mostraNascondi"
+    class="m-4"
+    [length]="clientiObj?.totalElements"
+    [pageSize]="20"
+    [pageSizeOptions]="[5, 10, 20, 50, 100]"
+    aria-label="Select page"
+    showFirstLastButtons="true"
+    (page)="pageEvent($event)"
+  >
+  </mat-paginator>
+</div>
+
+
+
+<!-- Pagina Principale -->
+<mat-spinner *ngIf="caricamento && mostraNascondi"></mat-spinner>
+<div *ngIf="clienti">
+  <h2 class="text-center" *ngIf="clienti.length== 0">La ricerca non ha prodotto risultati</h2>
+</div>
+<div class="contenitore" *ngIf="!caricamento && mostraNascondi && !tabella">
+  <mat-card *ngFor="let user of clienti">
+    <mat-card-header>
+      <mat-card-title>{{ user.ragioneSociale }} </mat-card-title>
+      <button mat-mini-fab color="basic" [matMenuTriggerFor]="menuC">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menuC="matMenu">
+        <button mat-menu-item (click)="openDialog(user)">
+          <mat-icon [style.color]="'#c2185b'"> info</mat-icon>
+          <span>Info Cliente</span>
+        </button>
+        <button
+          mat-menu-item
+          (click)="mostraENascondi()"
+          (click)="default()"
+          [routerLink]="user.id + '/fattureCliente'"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+        <mat-icon [style.color]="'#c2185b'" > assignment</mat-icon>
+          <span>Fatture Cliente</span>
+        </button>
+        <button
+          mat-menu-item
+          (click)="mostraENascondi()"
+          [routerLink]="user.id"
+        >
+          <mat-icon [style.color]="'#c2185b'">manage_accounts</mat-icon>
+          <span>Modifica Cliente</span>
+        </button>
+        <button mat-menu-item (click)="openAlert(user.id)">
+          <mat-icon [style.color]="'#c2185b'">delete</mat-icon>
+          <span>Elimina Cliente</span>
+        </button>
+      </mat-menu>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="mt-2"><mat-icon> email</mat-icon> Email : {{ user.email }}</p>
+      <p class="mt-2">
+        <mat-icon>receipt</mat-icon> Partita Iva : {{ user.partitaIva }}
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>
+<!-- TABELLA -->
+<div class="container">
+  <div id="tabella" *ngIf="!caricamento && mostraNascondi && tabella">
+    <table mat-table [dataSource]="clienti" class="mat-elevation-z8">
+      <ng-container matColumnDef="NomeCognome">
+        <th mat-header-cell *matHeaderCellDef>Ragione Sociale</th>
+        <td mat-cell *matCellDef="let cliente">
+          <mat-icon>business</mat-icon>
+          {{ cliente.ragioneSociale }}</td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let cliente" id="cella">
+          <mat-icon> email</mat-icon> {{ cliente.email }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="text-center">Actions</th>
+        <td mat-cell *matCellDef="let cliente" class="text-center">
+          <button mat-mini-fab color="basic" [matMenuTriggerFor]="menuC">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <mat-menu #menuC="matMenu">
+            <button mat-menu-item (click)="openDialog(cliente)">
+              <mat-icon [style.color]="'#c2185b'"> info</mat-icon>
+              <span>Info Cliente</span>
+            </button>
+            <button
+            mat-menu-item
+            (click)="mostraENascondi()"
+            [routerLink]="cliente.id + '/fattureCliente'"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+          <mat-icon [style.color]="'#c2185b'" > assignment</mat-icon>
+            <span>Fatture Cliente</span>
+          </button>
+            <button
+              mat-menu-item
+              (click)="mostraENascondi()"
+              [routerLink]="cliente.id"
+            >
+              <mat-icon [style.color]="'#c2185b'">manage_accounts</mat-icon>
+              <span>Modifica Cliente</span>
+            </button>
+            <button mat-menu-item (click)="openAlert(cliente.id)">
+              <mat-icon [style.color]="'#c2185b'">delete</mat-icon>
+              <span>Elimina Cliente</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>

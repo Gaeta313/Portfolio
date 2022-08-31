@@ -1,0 +1,129 @@
+<div class="content my-5">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <h1 class="text-center" [style.color]="'#c2185b'">Registrazione</h1>
+    <div class="field">
+      <div class="mb-2">
+        <mat-form-field appearance="fill">
+          <mat-label for="username">Username</mat-label>
+          <input
+            type="text"
+            formControlName="username"
+            id="username"
+            matInput
+            required
+          />
+        </mat-form-field>
+        <div
+          [style.color]="'red'"
+          *ngIf="
+            this.form.get('username')?.invalid &&
+            this.form.get('username')?.touched
+          "
+        >
+          Questo campo è obbligatorio
+        </div>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="fill">
+          <mat-label for="email">Email</mat-label>
+          <input
+            type="email"
+            formControlName="email"
+            id="email"
+            matInput
+            required
+            email
+          />
+        </mat-form-field>
+        <div
+          [style.color]="'red'"
+          *ngIf="
+            this.form.get('email')?.invalid &&
+            this.form.get('email')?.touched &&
+            !this.form.get('email')?.dirty
+          "
+        >
+          Questo campo è obbligatorio
+        </div>
+        <div
+          [style.color]="'red'"
+          *ngIf="
+            this.form.get('email')?.invalid &&
+            this.form.get('email')?.touched &&
+            this.form.get('email')?.dirty
+          "
+        >
+          Formato email non valido
+        </div>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="fill">
+          <mat-label for="password">Password</mat-label>
+          <input
+            type="password"
+            formControlName="password"
+            id="password"
+            matInput
+            required
+          />
+        </mat-form-field>
+        <div
+        [style.color]="'red'"
+        *ngIf="
+          this.form.get('password')?.invalid &&
+          this.form.get('password')?.touched &&
+          !this.form.get('password')?.dirty
+        "
+      >
+        Questo campo è obbligatorio
+      </div>
+      <div
+      [style.color]="'red'"
+      *ngIf="
+        this.form.get('password')?.invalid &&
+        this.form.get('password')?.touched &&
+        this.form.get('password')?.dirty
+      "
+    >
+      La password deve essere lunga almeno 6 caratteri
+    </div>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="fill">
+          <mat-label for="nome">Nome</mat-label>
+          <input type="text" formControlName="nome" id="nome" matInput />
+        </mat-form-field>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="fill">
+          <mat-label for="cognome">Cognome</mat-label>
+          <input type="text" formControlName="cognome" id="cognome" matInput />
+        </mat-form-field>
+      </div>
+      <div class="mb-2">
+        <mat-form-field appearance="fill">
+          <mat-label for="ruolo">Ruolo</mat-label>
+          <mat-select formControlName="role" id="ruolo" required>
+            <mat-option id="ruolo"  [value]="['user']">User</mat-option>
+            <mat-option id="ruolo"  [value]="['admin']">Admin</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div
+        [style.color]="'red'"
+        *ngIf="
+          this.form.get('role')?.invalid &&
+          this.form.get('role')?.touched
+        "
+      >
+        Bisogna effetuare una scelta
+      </div>
+      </div>
+      <button [disabled]="this.form.invalid" mat-raised-button color="primary" type="submit">
+        <div id="button">
+          Registrati
+          <mat-spinner *ngIf="caricamento" color="accent" [diameter]="20"></mat-spinner>
+        </div>
+      </button>
+    </div>
+  </form>
+</div>

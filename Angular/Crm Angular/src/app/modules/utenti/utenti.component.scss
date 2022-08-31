@@ -1,0 +1,38 @@
+
+.contenitore{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 10px;
+  row-gap: 20px;
+}
+
+mat-card{
+  width: 22%;
+}
+
+mat-spinner{
+  margin: auto;
+  margin-top :30px;
+}
+
+.red{
+  color: #c2185b;
+}
+
+p{
+  display: flex;
+}
+mat-icon{
+  margin-right: 5px;
+  color: #c2185b;
+}
+
+mat-card-header{
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-card-title{
+  margin-bottom: 0px !important;
+}
